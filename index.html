@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Local AI Studio — локальный запуск современных ИИ-моделей на компьютере.">
+<title>Local AI Studio — локальный ИИ</title>
+<style>
+:root{
+ --bg:#f7f7f7;--card:#fff;--text:#0a0a0a;--muted:#666;--line:#dedede;
+ --black:#050505;--soft:#f0f0f0;--shadow:0 22px 65px rgba(0,0,0,.09);--r:25px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:
+radial-gradient(circle at 50% -10%,#fff 0,#f7f7f7 45%,#eee 100%);line-height:1.6}
+a{text-decoration:none;color:inherit}button{font:inherit}.container{width:min(1160px,calc(100% - 36px));margin:auto}
+nav{position:sticky;top:0;z-index:50;background:rgba(247,247,247,.78);backdrop-filter:blur(18px);border-bottom:1px solid #ddd}
+.navin{height:72px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:-.035em}
+.brand img{width:39px;height:39px;object-fit:contain;border-radius:9px}
+.links{display:flex;gap:24px;color:#555;font-size:14px}.links a:hover{color:#000}
+.hero{padding:100px 0 80px;text-align:center}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border:1px solid #d5d5d5;background:#fff;border-radius:999px;font-size:13px;font-weight:750;animation:up .7s ease both}
+.dot{width:7px;height:7px;border-radius:50%;background:#111;box-shadow:0 0 0 5px #e5e5e5}
+h1{font-size:clamp(46px,7vw,82px);line-height:.98;letter-spacing:-.07em;margin:24px auto 20px;max-width:900px;animation:up .7s .08s ease both}
+.gradient{background:linear-gradient(90deg,#000,#777,#000);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:720px;margin:auto;color:var(--muted);font-size:19px;animation:up .7s .16s ease both}
+.actions{display:flex;justify-content:center;gap:12px;margin-top:32px;animation:up .7s .24s ease both}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:14px 21px;border-radius:14px;font-weight:780;border:1px solid #ccc;transition:.25s;cursor:pointer}
+.btn:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.13)}
+.primary{background:#050505;color:#fff;border-color:#050505}.secondary{background:#fff}
+.download{margin-top:62px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;text-align:left}
+.os{padding:27px;border:1px solid var(--line);background:rgba(255,255,255,.82);backdrop-filter:blur(14px);border-radius:var(--r);box-shadow:var(--shadow);transition:.3s;animation:up .7s .3s ease both}
+.os:hover{transform:translateY(-7px)}.os.disabled{opacity:.63}.top{display:flex;align-items:center;justify-content:space-between}
+.osicon{width:40px;height:40px;display:grid;place-items:center}.osicon svg{width:40px;height:40px;fill:#080808}.status{font-size:11px;font-weight:850;padding:6px 9px;border-radius:999px;background:#111;color:#fff}.soon{background:#eee;color:#555}
+.os h3{margin:18px 0 4px;font-size:22px}.os p{color:var(--muted);font-size:14px;min-height:48px}.os .btn{width:100%;margin-top:12px}
+section{padding:88px 0}.section-head{max-width:700px;margin-bottom:34px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:13px;font-weight:900}
+h2{font-size:clamp(34px,5vw,52px);letter-spacing:-.05em;line-height:1.05;margin:10px 0}.section-head p{color:var(--muted);font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.feature{padding:25px;background:#fff;border:1px solid var(--line);border-radius:22px;transition:.25s}
+.feature:hover{transform:translateY(-5px);box-shadow:var(--shadow)}.feature .ico{font-size:27px}.feature h3{margin:13px 0 5px}.feature p{margin:0;color:var(--muted);font-size:14px}
+.catalog{display:grid;grid-template-columns:1fr 1fr;gap:14px}.model{padding:18px 20px;background:#fff;border:1px solid var(--line);border-radius:18px;display:flex;justify-content:space-between;align-items:center}
+.tag{font-size:12px;color:#444;background:#eee;padding:5px 8px;border-radius:8px}
+.dark{background:#090909;color:#f5f5f5;border-radius:32px;padding:42px;box-shadow:0 25px 80px rgba(0,0,0,.18)}.dark p,.dark li{color:#aaa}.dark h2{color:#fff}
+.warning{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:28px}.warn{border:1px solid #272727;background:#111;border-radius:18px;padding:18px}.warn strong{display:block;margin-bottom:5px;color:#fff}
+.requirements{display:grid;grid-template-columns:1fr 1fr;gap:18px}.req{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px}.req ul{padding-left:20px;color:var(--muted)}
+.notice{padding:24px;border-left:4px solid #111;background:#eee;border-radius:16px;color:#333}
+.update-wrap{padding-top:10px}.update-card{position:relative;overflow:hidden;padding:clamp(28px,5vw,54px);border:1px solid #d9d9d9;border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(239,239,239,.78));box-shadow:0 24px 70px rgba(0,0,0,.09);backdrop-filter:blur(22px)}
+.update-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.version-badge{display:inline-flex;padding:7px 11px;border-radius:999px;background:#080808;color:white;font-size:12px;font-weight:850;letter-spacing:.04em}.update-label{color:#666;font-size:13px;font-weight:750}.update-card h2{max-width:760px}.update-intro{max-width:760px;color:#555;font-size:17px}.update-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:28px}.update-item{display:flex;gap:13px;padding:19px;background:rgba(255,255,255,.76);border:1px solid #dedede;border-radius:19px}.update-item .ico{font-size:24px;line-height:1.3}.update-item h3{margin:0 0 4px;font-size:16px}.update-item p{margin:0;color:#666;font-size:14px}.update-foot{margin-top:22px;color:#666;font-size:13px}
+footer{padding:50px 0 70px;color:#666;border-top:1px solid var(--line)}.footerin{display:flex;justify-content:space-between;gap:20px;align-items:center}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(max-width:800px){.links{display:none}.download,.grid,.catalog,.requirements,.warning{grid-template-columns:1fr}.hero{padding-top:70px}.actions{flex-direction:column}.actions .btn{width:100%}.footerin{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<nav><div class="container navin">
+<a class="brand" href="#"><img src="logo.png" alt="Local AI Studio logo"><span>Local AI Studio</span></a>
+<div class="links"><a href="#download">Скачать</a><a href="#update">Версия 1.1</a><a href="#features">Возможности</a><a href="#models">Модели</a><a href="#limits">Нюансы</a></div>
+</div></nav>
+
+<header class="hero container">
+<div class="pill"><span class="dot"></span> Рабочая развивающаяся версия</div>
+<h1>Ваш ИИ.<br><span class="gradient">На вашем компьютере.</span></h1>
+<p>Local AI Studio — удобный интерфейс для запуска современных ИИ-моделей локально. Без командной строки и без необходимости отдельно управлять Ollama.</p>
+<div class="actions"><a class="btn primary" href="#download">Скачать Local AI Studio ↓</a><a class="btn secondary" href="#features">Узнать больше</a></div>
+
+<div class="download" id="download">
+<article class="os"><div class="top"><div class="osicon windows-logo" aria-label="Windows">
+      <svg viewBox="0 0 48 48" role="img"><path d="M3 7.5 22 5v18H3zM25 4.6l20-2.7v21.1H25zM3 25h19v18L3 40.5zM25 25h20v21.1l-20-2.7z"/></svg>
+    </div><span class="status">ДОСТУПНО</span></div>
+<h3>Windows</h3><p>Основная текущая версия. Установка через LocalAIStudio_Setup.exe.</p>
+<a class="btn primary" href="https://github.com/ivan28262/LocalAIStudio/releases/latest/download/LocalAIStudio_Setup.exe">Скачать для Windows</a></article>
+<article class="os disabled"><div class="top"><div class="osicon apple-logo" aria-label="Apple">
+      <svg viewBox="0 0 48 48" role="img"><path d="M32.7 25.6c0-4.7 3.8-7 4-7.1-2.2-3.2-5.6-3.7-6.8-3.8-2.9-.3-5.6 1.7-7 1.7-1.5 0-3.7-1.7-6.1-1.6-3.1.1-5.9 1.8-7.5 4.5-3.2 5.5-.8 13.6 2.3 18 1.5 2.1 3.3 4.5 5.7 4.4 2.3-.1 3.2-1.5 6-1.5s3.6 1.5 6 1.4c2.5 0 4-2.2 5.5-4.3 1.7-2.5 2.4-4.9 2.5-5-.1 0-4.6-1.8-4.6-6.7zM28.2 11.8c1.3-1.6 2.2-3.8 2-6-1.9.1-4.2 1.3-5.5 2.9-1.2 1.4-2.2 3.6-1.9 5.7 2.1.2 4.2-1 5.4-2.6z"/></svg>
+    </div><span class="status soon">СКОРО</span></div>
+<h3>macOS</h3><p>Версия для Mac пока находится в разработке и временно недоступна.</p><button class="btn" disabled>Временно недоступно</button></article>
+<article class="os disabled"><div class="top"><div class="osicon linux-logo" aria-label="Linux">
+      <svg viewBox="0 0 48 48" role="img"><path d="M24 4c-7.1 0-10.1 6.7-10.1 14.3 0 3.7-2.4 6.7-5.3 9.1-2.3 1.9-2.6 5.2-.3 6.9 2.3 1.7 6.2.9 8.7-.3 2.2-1 4.5-1.5 7-1.5s4.8.5 7 1.5c2.5 1.2 6.4 2 8.7.3 2.3-1.7 2-5-.3-6.9-2.9-2.4-5.3-5.4-5.3-9.1C34.1 10.7 31.1 4 24 4zm-5.8 13.8c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5-2.5-1.1-2.5-2.5 1.1-2.5 2.5-2.5zm11.6 0c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5-2.5-1.1-2.5-2.5 1.1-2.5 2.5-2.5zM16 29c2.6 1.1 5.3 1.7 8 1.7s5.4-.6 8-1.7c-.6 3.2-3.8 5.9-8 5.9s-7.4-2.7-8-5.9z"/></svg>
+    </div><span class="status soon">СКОРО</span></div>
+<h3>Linux</h3><p>Поддержка Linux планируется. Скачать эту версию сейчас нельзя.</p><button class="btn" disabled>Временно недоступно</button></article>
+</div>
+</header>
+
+<main>
+<section id="update" class="update-wrap"><div class="container"><div class="update-card">
+<div class="update-top"><span class="version-badge">VERSION 1.1</span><span class="update-label">Обновление Local AI Studio</span></div>
+<h2>Интерфейс стал плавнее. Работать с кодом — удобнее.</h2>
+<p class="update-intro">В версии 1.1 мы сосредоточились на внешнем виде и удобстве повседневной работы: обновили оформление, смягчили анимации и улучшили представление сгенерированного кода.</p>
+<div class="update-grid">
+
+<article class="update-item"><div class="ico">🌊</div><div><h3>Плавные анимации</h3><p>Более спокойные переходы и раскрытие элементов без резких движений.</p></div></article>
+<article class="update-item"><div class="ico">⌨️</div><div><h3>Удобнее работать с кодом</h3><p>Блоки кода в ответах можно сворачивать и раскрывать, а готовый код — копировать одной кнопкой.</p></div></article>
+<article class="update-item"><div class="ico">💬</div><div><h3>Доработки чата</h3><p>Подправлены элементы ввода и скругления, чтобы интерфейс выглядел аккуратнее и был удобнее в использовании.</p></div></article>
+</div>
+<p class="update-foot">Обновление 1.1 улучшает интерфейс и удобство работы. Скорость генерации и качество ответов по-прежнему зависят от выбранной модели и компьютера.</p>
+<div class="actions" style="justify-content:flex-start"><a class="btn primary" href="https://github.com/ivan28262/LocalAIStudio/releases/latest/download/LocalAIStudio_Setup.exe">Скачать версию для Windows ↓</a></div>
+</div></div></section>
+<section id="features"><div class="container"><div class="section-head"><div class="eyebrow">Возможности</div>
+<h2>Всё необходимое для локального ИИ — в одном месте.</h2><p>Приложение объединяет каталог моделей, загрузку, управление и чат в одном интерфейсе.</p></div>
+<div class="grid">
+<div class="feature"><div class="ico">🤖</div><h3>Локальный запуск</h3><p>Модели работают непосредственно на компьютере пользователя через внутренний Ollama runtime.</p></div>
+<div class="feature"><div class="ico">📦</div><h3>Каталог моделей</h3><p>Семейства Qwen, Llama, Gemma, Mistral, DeepSeek, Phi, Granite и другие.</p></div>
+<div class="feature"><div class="ico">📥</div><h3>Загрузка моделей</h3><p>Размер, параметры, назначение, русский язык и требования отображаются прямо в каталоге.</p></div>
+<div class="feature"><div class="ico">💬</div><h3>Чат</h3><p>История, потоковая генерация, Markdown и индикатор «Модель думает…».</p></div>
+<div class="feature"><div class="ico">📎</div><h3>Файлы</h3><p>Поддерживаемые текстовые документы можно прикреплять к запросу через кнопку «+».</p></div>
+<div class="feature"><div class="ico">🖼️</div><h3>Изображения</h3><p>Vision-ввод доступен для совместимых мультимодальных моделей, например LLaVA.</p></div>
+<div class="feature"><div class="ico">🌐</div><h3>Интернет-поиск</h3><p>Дополнительный режим через Ollama Web Search передаёт найденные материалы локальной модели.</p></div>
+<div class="feature"><div class="ico">📚</div><h3>История чатов</h3><p>Чаты хранятся локально: их можно создавать, искать, открывать и удалять.</p></div>
+<div class="feature"><div class="ico">🖥️</div><h3>Информация о моделях</h3><p>Производитель, параметры, размер, русский язык, vision и ориентировочные требования.</p></div>
+</div></div></section>
+
+<section id="models"><div class="container"><div class="section-head"><div class="eyebrow">Каталог</div><h2>Поддерживаемые семейства</h2><p>Каталог сгруппирован по семействам, чтобы не заставлять пользователя разбираться в технических тегах Ollama.</p></div>
+<div class="catalog">
+<div class="model"><strong>Qwen</strong><span class="tag">Alibaba</span></div><div class="model"><strong>Llama</strong><span class="tag">Meta</span></div>
+<div class="model"><strong>Gemma</strong><span class="tag">Google</span></div><div class="model"><strong>Mistral</strong><span class="tag">Mistral AI</span></div>
+<div class="model"><strong>DeepSeek</strong><span class="tag">AI models</span></div><div class="model"><strong>Phi</strong><span class="tag">Microsoft</span></div>
+<div class="model"><strong>Granite</strong><span class="tag">IBM</span></div><div class="model"><strong>CodeLlama</strong><span class="tag">Code</span></div>
+<div class="model"><strong>StarCoder</strong><span class="tag">Code</span></div><div class="model"><strong>LLaVA</strong><span class="tag">Vision</span></div>
+<div class="model"><strong>Solar</strong><span class="tag">LLM</span></div><div class="model"><strong>StableLM</strong><span class="tag">LLM</span></div>
+<div class="model"><strong>Zephyr</strong><span class="tag">LLM</span></div><div class="model"><strong>WizardLM</strong><span class="tag">LLM</span></div>
+<div class="model"><strong>Nemotron</strong><span class="tag">NVIDIA</span></div>
+</div></div></section>
+
+<section><div class="container"><div class="dark" id="limits"><div class="eyebrow">Важно знать</div><h2>Локальный ИИ — это не магия.</h2>
+<p>Производительность и качество зависят от выбранной модели, её размера, квантования и компьютера пользователя. Минимальные требования являются ориентировочными.</p>
+<div class="warning">
+<div class="warn"><strong>⚡ Скорость</strong>Большие модели 27B, 30B, 32B и 70B требуют значительно больше RAM и/или VRAM.</div>
+<div class="warn"><strong>🧠 Память</strong>Потребление зависит от квантования, длины контекста, GPU, версии Ollama и числа загруженных моделей.</div>
+<div class="warn"><strong>🇷🇺 Русский язык</strong>Размер модели не гарантирует качество русского.</div>
+<div class="warn"><strong>🖼️ Vision</strong>Не каждая модель умеет видеть изображения.</div>
+<div class="warn"><strong>🌐 Web Search</strong>Интернет-поиск требует API-ключ Ollama Web Search и зависит от внешнего сервиса.</div>
+<div class="warn"><strong>🔄 Стабильность</strong>Некоторые модели могут долго загружаться, медленно отвечать или не поддерживать отдельные функции.</div>
+<div class="warn"><strong>💾 Несколько моделей</strong>Одновременная работа с несколькими большими моделями может быть некомфортной.</div>
+<div class="warn"><strong>☁️ Не облачная нейросеть</strong>Local AI Studio не является заменой самой мощной облачной модели.</div>
+</div></div></div></section>
+
+<section><div class="container"><div class="section-head"><div class="eyebrow">Установка</div><h2>Просто установите и выберите модель.</h2>
+<p>В финальной Windows-сборке Ollama предусмотрена как внутренний runtime.</p></div>
+<div class="requirements">
+<div class="req"><h3>Что входит в установщик</h3><ul><li>Local AI Studio</li><li>Внутренний Ollama runtime</li><li>Интерфейс управления моделями и чат</li><li>Без предустановленных моделей</li></ul></div>
+<div class="req"><h3>Почему модели не входят</h3><ul><li>Одна модель может занимать от сотен МБ до десятков ГБ.</li><li>Пользователь выбирает только нужные модели.</li><li>Модели скачиваются из самого приложения.</li></ul></div>
+</div>
+<div class="notice" style="margin-top:18px"><strong>Статус проекта:</strong> Local AI Studio — рабочая развивающаяся версия. Возможны мелкие проблемы с отдельными моделями, форматами файлов, мультимодальностью, интернет-поиском и скоростью генерации.</div>
+</div></section>
+
+<section><div class="container"><div class="section-head"><div class="eyebrow">Концепция</div><h2>Приватность по умолчанию.</h2>
+<p>В основном локальном режиме цепочка выглядит так: запрос → локальная модель → локальный ответ. OpenAI, ChatGPT и другие облачные модели в приложение не встроены.</p></div></div></section>
+</main>
+
+<footer><div class="container footerin"><div><strong>Local AI Studio</strong><br><span>Локальный ИИ без лишней сложности.</span></div><div>© 2026 Local AI Studio · Windows доступен · macOS/Linux скоро</div></div></footer>
+</body>
+</html>
